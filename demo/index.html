@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NovaCraft — AI-Powered Workflow Automation</title>
+  <meta name="description" content="NovaCraft automates your business workflows with cutting-edge AI. Ship faster, scale smarter." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #06080d;
+      --bg-secondary: #0c1017;
+      --bg-card: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.08);
+      --text-primary: #f0f2f5;
+      --text-secondary: #8b93a1;
+      --text-muted: #5a6270;
+      --accent: #6c5ce7;
+      --accent-light: #a29bfe;
+      --accent-glow: rgba(108, 92, 231, 0.35);
+      --green: #00cec9;
+      --pink: #fd79a8;
+      --orange: #fdcb6e;
+      --gradient-hero: linear-gradient(135deg, #6c5ce7 0%, #00cec9 50%, #fd79a8 100%);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── Animated Background ─────────────────────────────── */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      animation: orbFloat 20s ease-in-out infinite;
+    }
+    .bg-orb--1 { width: 600px; height: 600px; background: var(--accent-glow); top: -10%; left: -10%; }
+    .bg-orb--2 { width: 500px; height: 500px; background: rgba(0, 206, 201, 0.15); bottom: 10%; right: -5%; animation-delay: -7s; }
+    .bg-orb--3 { width: 400px; height: 400px; background: rgba(253, 121, 168, 0.1); top: 50%; left: 40%; animation-delay: -14s; }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -40px) scale(1.05); }
+      66% { transform: translate(-20px, 30px) scale(0.95); }
+    }
+
+    /* ── Layout ──────────────────────────────────────────── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ── Nav ─────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 16px 0;
+      backdrop-filter: blur(20px);
+      background: rgba(6, 8, 13, 0.7);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    }
+    .logo {
+      font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+      background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-cta {
+      padding: 10px 24px; border-radius: 8px; border: none;
+      background: var(--accent); color: #fff; font-weight: 600; font-size: 14px;
+      cursor: pointer; transition: all 0.25s;
+    }
+    .nav-cta:hover { background: #7c6ef0; transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-glow); }
+
+    /* ── Hero ────────────────────────────────────────────── */
+    .hero {
+      padding: 180px 0 120px; text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 18px; border-radius: 999px;
+      background: rgba(108, 92, 231, 0.12);
+      border: 1px solid rgba(108, 92, 231, 0.25);
+      font-size: 13px; font-weight: 600; color: var(--accent-light);
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s ease-out;
+    }
+    .hero-badge .dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    .hero h1 {
+      font-size: clamp(42px, 6vw, 76px); font-weight: 900; letter-spacing: -2px;
+      line-height: 1.05; margin-bottom: 24px;
+      animation: fadeUp 0.6s ease-out 0.1s both;
+    }
+    .hero h1 .gradient-text {
+      background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 19px; color: var(--text-secondary); max-width: 560px; margin: 0 auto 40px;
+      animation: fadeUp 0.6s ease-out 0.2s both;
+    }
+    .hero-actions {
+      display: flex; gap: 16px; justify-content: center;
+      animation: fadeUp 0.6s ease-out 0.3s both;
+    }
+    .btn-primary {
+      padding: 14px 32px; border-radius: 10px; border: none;
+      background: var(--accent); color: #fff; font-weight: 700; font-size: 15px;
+      cursor: pointer; transition: all 0.3s;
+      box-shadow: 0 4px 24px var(--accent-glow);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--accent-glow); }
+    .btn-secondary {
+      padding: 14px 32px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--bg-card);
+      color: var(--text-primary); font-weight: 600; font-size: 15px;
+      cursor: pointer; transition: all 0.3s;
+      backdrop-filter: blur(10px);
+    }
+    .btn-secondary:hover { border-color: var(--accent); background: rgba(108, 92, 231, 0.08); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Stats ───────────────────────────────────────────── */
+    .stats {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+      padding: 80px 0;
+    }
+    .stat-card {
+      text-align: center; padding: 32px 20px; border-radius: var(--radius);
+      background: var(--bg-card); border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+    }
+    .stat-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .stat-number {
+      font-size: 36px; font-weight: 800; letter-spacing: -1px;
+      background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .stat-label { font-size: 14px; color: var(--text-secondary); margin-top: 6px; }
+
+    /* ── Features ─────────────────────────────────────────── */
+    .section-title {
+      text-align: center; margin-bottom: 60px;
+    }
+    .section-title h2 {
+      font-size: 40px; font-weight: 800; letter-spacing: -1px; margin-bottom: 16px;
+    }
+    .section-title p { color: var(--text-secondary); font-size: 17px; max-width: 500px; margin: 0 auto; }
+
+    .features {
+      padding: 80px 0;
+    }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .feature-card {
+      padding: 36px 28px; border-radius: var(--radius);
+      background: var(--bg-card); border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      transition: all 0.35s;
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--gradient-hero); opacity: 0; transition: opacity 0.3s;
+    }
+    .feature-card:hover { border-color: rgba(108, 92, 231, 0.3); transform: translateY(-4px); }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 20px;
+    }
+    .feature-icon--purple { background: rgba(108, 92, 231, 0.15); }
+    .feature-icon--green { background: rgba(0, 206, 201, 0.15); }
+    .feature-icon--pink { background: rgba(253, 121, 168, 0.15); }
+    .feature-icon--orange { background: rgba(253, 203, 110, 0.15); }
+    .feature-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .feature-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+    /* ── Pricing ──────────────────────────────────────────── */
+    .pricing { padding: 80px 0; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
+    .price-card {
+      padding: 36px 28px; border-radius: var(--radius);
+      background: var(--bg-card); border: 1px solid var(--border);
+      backdrop-filter: blur(10px); transition: all 0.3s;
+    }
+    .price-card--featured {
+      border-color: var(--accent);
+      background: rgba(108, 92, 231, 0.06);
+      box-shadow: 0 0 60px rgba(108, 92, 231, 0.1);
+      transform: scale(1.03);
+    }
+    .price-card:hover { transform: translateY(-4px); }
+    .price-card--featured:hover { transform: scale(1.03) translateY(-4px); }
+    .price-tag {
+      display: inline-block; padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;
+    }
+    .price-tag--starter { background: rgba(0, 206, 201, 0.15); color: var(--green); }
+    .price-tag--pro { background: rgba(108, 92, 231, 0.2); color: var(--accent-light); }
+    .price-tag--enterprise { background: rgba(253, 121, 168, 0.15); color: var(--pink); }
+    .price-amount { font-size: 48px; font-weight: 900; letter-spacing: -2px; }
+    .price-amount span { font-size: 16px; color: var(--text-secondary); font-weight: 500; }
+    .price-desc { font-size: 14px; color: var(--text-secondary); margin: 12px 0 24px; }
+    .price-features { list-style: none; margin-bottom: 28px; }
+    .price-features li {
+      font-size: 14px; color: var(--text-secondary); padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .price-features li::before { content: '✓'; color: var(--green); font-weight: 700; }
+    .price-btn {
+      width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--border);
+      background: transparent; color: var(--text-primary); font-weight: 600; font-size: 14px;
+      cursor: pointer; transition: all 0.3s;
+    }
+    .price-btn:hover { border-color: var(--accent); background: rgba(108, 92, 231, 0.08); }
+    .price-btn--primary {
+      background: var(--accent); border-color: var(--accent); color: #fff;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+    .price-btn--primary:hover { background: #7c6ef0; }
+
+    /* ── Testimonials ────────────────────────────────────── */
+    .testimonials { padding: 80px 0; }
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .testimonial-card {
+      padding: 32px 24px; border-radius: var(--radius);
+      background: var(--bg-card); border: 1px solid var(--border);
+      backdrop-filter: blur(10px); transition: all 0.3s;
+    }
+    .testimonial-card:hover { border-color: rgba(108, 92, 231, 0.3); transform: translateY(-3px); }
+    .testimonial-quote { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; font-style: italic; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .testimonial-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700;
+    }
+    .testimonial-avatar--1 { background: rgba(108, 92, 231, 0.2); color: var(--accent-light); }
+    .testimonial-avatar--2 { background: rgba(0, 206, 201, 0.2); color: var(--green); }
+    .testimonial-avatar--3 { background: rgba(253, 121, 168, 0.2); color: var(--pink); }
+    .testimonial-name { font-size: 14px; font-weight: 600; }
+    .testimonial-role { font-size: 12px; color: var(--text-muted); }
+
+    /* ── CTA ──────────────────────────────────────────────── */
+    .cta {
+      padding: 100px 0; text-align: center;
+    }
+    .cta-box {
+      padding: 64px 48px; border-radius: 24px;
+      background: linear-gradient(135deg, rgba(108,92,231,0.12), rgba(0,206,201,0.08));
+      border: 1px solid rgba(108, 92, 231, 0.2);
+      position: relative; overflow: hidden;
+    }
+    .cta-box::before {
+      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(108,92,231,0.06) 0%, transparent 60%);
+      animation: ctaGlow 8s ease-in-out infinite;
+    }
+    @keyframes ctaGlow {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(5%, 5%); }
+    }
+    .cta-box h2 { font-size: 36px; font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; position: relative; }
+    .cta-box p { color: var(--text-secondary); font-size: 17px; margin-bottom: 32px; position: relative; }
+    .cta-box .btn-primary { position: relative; font-size: 16px; padding: 16px 40px; }
+
+    /* ── Footer ───────────────────────────────────────────── */
+    footer {
+      padding: 48px 0; border-top: 1px solid var(--border); text-align: center;
+    }
+    footer p { font-size: 13px; color: var(--text-muted); }
+
+    /* ── Chat hint ────────────────────────────────────────── */
+    .chat-hint {
+      position: fixed; bottom: 92px; right: 24px; z-index: 9997;
+      padding: 12px 20px; border-radius: 12px;
+      background: var(--accent); color: #fff; font-size: 13px; font-weight: 600;
+      box-shadow: 0 4px 20px var(--accent-glow);
+      animation: hintBounce 2s ease-in-out infinite, fadeIn 0.5s ease-out 2s both;
+      pointer-events: none;
+    }
+    .chat-hint::after {
+      content: ''; position: absolute; bottom: -6px; right: 24px;
+      width: 12px; height: 12px; background: var(--accent);
+      transform: rotate(45deg);
+    }
+    @keyframes hintBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .features-grid, .pricing-grid, .testimonials-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 36px; }
+      .price-card--featured { transform: none; }
+      .price-card--featured:hover { transform: translateY(-4px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background effects -->
+  <div class="bg-grid"></div>
+  <div class="bg-orb bg-orb--1"></div>
+  <div class="bg-orb bg-orb--2"></div>
+  <div class="bg-orb bg-orb--3"></div>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-inner">
+      <div class="logo">NovaCraft</div>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="http://localhost:8000/docs" target="_blank">API Docs</a></li>
+      </ul>
+      <button class="nav-cta">Get Started</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge"><span class="dot"></span> Now in Public Beta</div>
+      <h1>Automate Everything<br>with <span class="gradient-text">AI Workflows</span></h1>
+      <p>NovaCraft connects your tools, automates repetitive tasks, and lets your team focus on what matters — powered by next-gen AI.</p>
+      <div class="hero-actions">
+        <button class="btn-primary">Start Free Trial</button>
+        <button class="btn-secondary">Watch Demo ▸</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="container">
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-number">12K+</div>
+        <div class="stat-label">Active Teams</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">4.2M</div>
+        <div class="stat-label">Workflows Run</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">99.9%</div>
+        <div class="stat-label">Uptime SLA</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">3.8s</div>
+        <div class="stat-label">Avg Response</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-title">
+        <h2>Built for Modern Teams</h2>
+        <p>Everything you need to automate, monitor, and scale your operations.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon feature-icon--purple">⚡</div>
+          <h3>Lightning Fast Setup</h3>
+          <p>Connect your existing tools in minutes. No code required, just drag, drop, and automate.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon--green">🤖</div>
+          <h3>AI-Powered Decisions</h3>
+          <p>Our AI engine learns from your patterns and makes intelligent routing decisions in real-time.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon--pink">🔒</div>
+          <h3>Enterprise Security</h3>
+          <p>SOC 2 Type II compliant. End-to-end encryption. Your data never leaves your infrastructure.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon--orange">📊</div>
+          <h3>Real-time Analytics</h3>
+          <p>Track every workflow execution with detailed logs, metrics, and customizable dashboards.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon--purple">🔗</div>
+          <h3>200+ Integrations</h3>
+          <p>Slack, Jira, GitHub, Salesforce, HubSpot — connect every tool in your stack seamlessly.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon--green">🌍</div>
+          <h3>Global Edge Network</h3>
+          <p>Deploy workflows to 40+ regions worldwide. Low latency, high availability, everywhere.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="section-title">
+        <h2>Simple, Transparent Pricing</h2>
+        <p>Start free. Scale as you grow. No hidden fees.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-tag price-tag--starter">Starter</div>
+          <div class="price-amount">$0<span>/mo</span></div>
+          <p class="price-desc">Perfect for side projects and small teams getting started.</p>
+          <ul class="price-features">
+            <li>100 workflow runs/mo</li>
+            <li>5 integrations</li>
+            <li>Community support</li>
+            <li>Basic analytics</li>
+          </ul>
+          <button class="price-btn">Get Started Free</button>
+        </div>
+        <div class="price-card price-card--featured">
+          <div class="price-tag price-tag--pro">Pro — Most Popular</div>
+          <div class="price-amount">$49<span>/mo</span></div>
+          <p class="price-desc">For growing teams that need power and flexibility.</p>
+          <ul class="price-features">
+            <li>Unlimited workflow runs</li>
+            <li>All 200+ integrations</li>
+            <li>Priority support</li>
+            <li>Advanced analytics</li>
+            <li>Custom AI models</li>
+          </ul>
+          <button class="price-btn price-btn--primary">Start 14-day Trial</button>
+        </div>
+        <div class="price-card">
+          <div class="price-tag price-tag--enterprise">Enterprise</div>
+          <div class="price-amount">Custom</div>
+          <p class="price-desc">Dedicated infrastructure, SLAs, and white-glove onboarding.</p>
+          <ul class="price-features">
+            <li>Everything in Pro</li>
+            <li>On-prem deployment</li>
+            <li>Dedicated account manager</li>
+            <li>99.99% SLA</li>
+            <li>Custom contracts</li>
+          </ul>
+          <button class="price-btn">Contact Sales</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials" id="testimonials">
+    <div class="container">
+      <div class="section-title">
+        <h2>Loved by Teams Worldwide</h2>
+        <p>See what our customers have to say.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <p class="testimonial-quote">"NovaCraft cut our manual processing time by 80%. The AI routing is incredibly accurate — it just works."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar testimonial-avatar--1">SK</div>
+            <div>
+              <div class="testimonial-name">Sarah Kim</div>
+              <div class="testimonial-role">VP Engineering, Acme Corp</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-quote">"We migrated from three different tools to NovaCraft. The unified dashboard alone saves us hours every week."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar testimonial-avatar--2">MR</div>
+            <div>
+              <div class="testimonial-name">Marcus Rivera</div>
+              <div class="testimonial-role">CTO, DataFlow Labs</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-quote">"The support team is phenomenal. We had our first automation running in under 15 minutes. Truly impressive."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar testimonial-avatar--3">AL</div>
+            <div>
+              <div class="testimonial-name">Aisha Lakshmi</div>
+              <div class="testimonial-role">Head of Ops, ScaleUp.io</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta-box">
+        <h2>Ready to automate your workflows?</h2>
+        <p>Join 12,000+ teams shipping faster with NovaCraft.</p>
+        <button class="btn-primary">Start Free — No Credit Card</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>© 2026 NovaCraft, Inc. All rights reserved. · Privacy · Terms · Status</p>
+    </div>
+  </footer>
+
+  <!-- Chat hint bubble -->
+  <div class="chat-hint">👋 Try our support chat!</div>
+
+  <!-- ═══ ReplyGiver Chat Widget ═══ -->
+  <script>
+    window.REPLYGIVER_SITE_ID = 1;
+    window.REPLYGIVER_API_URL = 'http://localhost:8000';
+  </script>
+  <script src="http://localhost:8000/api/widget.js"></script>
+
+  <!-- Hide hint when chat is opened -->
+  <script>
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('#rg-btn')) {
+        var hint = document.querySelector('.chat-hint');
+        if (hint) hint.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>

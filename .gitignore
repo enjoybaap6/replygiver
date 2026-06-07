@@ -1,0 +1,36 @@
+# Environments
+.env
+.env.local
+.env.*
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite
+*.db
+replygiver.db
+backend/replygiver.db
+venv/
+.venv/
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Node / Next.js / Dashboard
+node_modules/
+.next/
+out/
+build/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Accidental directories
+{dashboard/
